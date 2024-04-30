@@ -12,16 +12,17 @@ $(document).ready(function() {
     };
     let turno = 1;
     let gameOver=false;
+    let nameCheck=false; // para que no spueda clickear nada hasta que se introduzcan  los nombres
 
     function checkGanador() {
         // checkea columnas
         for (let i = 1; i <= 3; i++) {
             if (casillas[i] !== "vacio" && casillas[i] === casillas[i + 3] && casillas[i] === casillas[i + 6]) {    // comprueba que la casilla no esté vacia y la compara con las otras casillas de la columna
-                if(casillas[i]=="rojo"){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
-                    $(".contenedorTexto").html("<strong>El jugador rojo ha ganado</strong>");
+                if(casillas[i]==nombreJ1){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
+                    $(".contenedorTexto").html(`<strong>${nombreJ1} ha ganado</strong>`);
                     mensajeFinJuego();
                 }else{
-                    $(".contenedorTexto").html("<strong>El jugador azul ha ganado</strong>");
+                    $(".contenedorTexto").html(`<strong>${nombreJ2} ha ganado</strong>`);
                     mensajeFinJuego();
                 }
                 return;
@@ -30,11 +31,11 @@ $(document).ready(function() {
         // checkea filas
         for (let i = 1; i <= 7; i+=3) {
             if (casillas[i] !== "vacio" && casillas[i] === casillas[i + 1] && casillas[i] === casillas[i + 2]) {    // comprueba que la casilla no esté vacia y la compara con las otras casillas de la fila
-                if(casillas[i]=="rojo"){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
-                    $(".contenedorTexto").html("<strong>El jugador rojo ha ganado</strong>");
+                if(casillas[i]==nombreJ1){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
+                    $(".contenedorTexto").html(`<strong>${nombreJ1} ha ganado</strong>`);
                     mensajeFinJuego();
                 }else{
-                    $(".contenedorTexto").html("<strong>El jugador azul ha ganado</strong>");
+                    $(".contenedorTexto").html(`<strong>${nombreJ2} ha ganado</strong>`);
                     mensajeFinJuego();
                 }
                 return;
@@ -42,21 +43,21 @@ $(document).ready(function() {
         }    
         // chequea diagonales
         if (casillas[1] !== "vacio" && casillas[1] === casillas[5] && casillas[1] === casillas[9]) {    // comprueba que la casilla no esté vacia y la compara con las otras casillas de la diagonal
-            if(casillas[1]=="rojo"){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
-                $(".contenedorTexto").html("<strong>El jugador rojo ha ganado</strong>");
+            if(casillas[1]==nombreJ1){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
+                $(".contenedorTexto").html(`<strong>${nombreJ1} ha ganado</strong>`);
                 mensajeFinJuego();
             }else{
-                $(".contenedorTexto").html("<strong>El jugador azul ha ganado</strong>");
+                $(".contenedorTexto").html(`<strong>${nombreJ2} ha ganado</strong>`);
                 mensajeFinJuego();
             }
             return;
         }
         if (casillas[3] !== "vacio" && casillas[3] === casillas[5] && casillas[3] === casillas[7]) {    // comprueba que la casilla no esté vacia y la compara con las otras casillas de la diagonal
-            if(casillas[3]=="rojo"){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
-                $(".contenedorTexto").html("<strong>El jugador rojo ha ganado</strong>");
+            if(casillas[3]==nombreJ1){    // si coinciden, se declara ganador, y muestra un mensaje u otro dependiendo del jugador que haya ganado
+                $(".contenedorTexto").html(`<strong>${nombreJ1} ha ganado</strong>`);
                 mensajeFinJuego();
             }else{
-                $(".contenedorTexto").html("<strong>El jugador azul ha ganado</strong>");
+                $(".contenedorTexto").html(`<strong>${nombreJ2} ha ganado</strong>`);
                 mensajeFinJuego();
             }
             return;
@@ -64,7 +65,7 @@ $(document).ready(function() {
         // si no hay ganador, se declara empate
         if (Object.values(casillas).every(value => value !== "vacio")) {    // checkea que todos los valores del objeto casillas sean distinto de vacio
             $(".contenedorTexto").html("<strong>EMPATE</strong>");
-
+            
             setTimeout(function() {
                 
                 var iframe = $('<iframe>', {    // iframe para el video
@@ -78,8 +79,34 @@ $(document).ready(function() {
                 $('body').html(''); // borramos todo            
                 $('body').append(iframe); //metemos el iframe en body
             }, 1000); // delay de 1 segundo
+            
         }
     }
+    let nombreJ1=null,nombreJ2=null;// iniciamos variables para nombres
+
+    
+
+    $("#agregar").click(function() {
+        console.log("//////");
+        nombreJ1 = $("#nombre1").val();
+        nombreJ2 = $("#nombre2").val();
+        // Recuerda que no hay input si se agrega sin texto
+        if (nombreJ1.trim() === '') {
+            alert('Por favor numero 1, introduzca un nombre valido');
+            return;
+        };
+        if (nombreJ2.trim() === '') {
+            alert('Por favor numero 2, introduzca un nombre valido');
+            return;
+        };
+        if(nombreJ1!=null && nombreJ2!=null){   // cuando las dos cambian del valor inicial, se inicia la partida
+            nameCheck=true;
+            $(".contenedorTexto").html(`<strong>Turno de ${nombreJ1}</strong>(ROJO)`);
+        }
+    });
+
+
+    
 
     function mensajeFinJuego() {
         $(".contenedorTexto2").css("display", "flex"); // cambia el flex de none a flex para mostrar el mensaje
@@ -97,20 +124,20 @@ $(document).ready(function() {
 
         var casillaId = $(this).data("casilla");    // guarda la id de esa casilla usando "data" (declarado en el div de las casillas)
 
-        if (casillas[casillaId] === "vacio" && gameOver===false) {  //busca la casilla con la id y si esta vacia, checkea las condiciones
+        if (casillas[casillaId] === "vacio" && gameOver===false && nameCheck===true) {  //busca la casilla con la id y si esta vacia, se han introducido nombres y el juego sigue en curso, checkea las condiciones
 
             var imgElement = $(this).find('img'); // identificamos la imagen de la casilla
 
             if (turno === 1) {  // dependiendo del turno, actualiza el estado de la casilla a un color u otro
                 imgElement.attr('src', 'tile_1.png'); // cambiamos la imagen contenida en casilla por la nueva ruta con el metodo attr
-                casillas[casillaId] = "rojo";
+                casillas[casillaId] = nombreJ1;
                 turno = 2;  // y cambia el turno
-                $(".contenedorTexto").html("<strong>Turno del jugador azul</strong>");
+                $(".contenedorTexto").html(`<strong>Turno de ${nombreJ2}</strong>(AZUL)`);
             } else {    // dependiendo del turno, actualiza el estado de la casilla a un color u otro
                 imgElement.attr('src', 'tile_2.png'); // cambiamos la imagen contenida en casilla por la nueva ruta
-                casillas[casillaId] = "azul";
+                casillas[casillaId] = nombreJ2;
                 turno = 1;  // y cambia el turno
-                $(".contenedorTexto").html("<strong>Turno del jugador rojo</strong>");
+                $(".contenedorTexto").html(`<strong>Turno de ${nombreJ1}</strong>(ROJO)`);
             }
             checkGanador();
         }

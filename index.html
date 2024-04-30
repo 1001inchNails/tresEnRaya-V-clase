@@ -54,10 +54,33 @@
             width: 100px;
             height: 100px;
         }
+        button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border:  0.5px solid #000;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        button:hover {
+            background-color: rgb(51, 255, 0);
+          }
+        input {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border:  0.5px solid #000;
+            border-radius: 5px;
+            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
-    <div class="contenedorTexto"><strong>Turno del jugador rojo</strong></div>
+    <div class="contenedorTexto">
+        <input id="nombre1" type="text" placeholder="Nombre jugador 1">
+        &nbsp;&nbsp;
+        <input id="nombre2" type="text" placeholder="Nombre jugador 2">
+        &nbsp;&nbsp;<button id="agregar">Agregar</button>
+    </div>
 
     <div class="contenedor">
         <div class="casilla" data-casilla="1"><img src="tile.png" width="100" height="100"></div>
