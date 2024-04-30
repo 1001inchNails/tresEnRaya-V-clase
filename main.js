@@ -97,7 +97,7 @@ $(document).ready(function() {
 
         var casillaId = $(this).data("casilla");    // guarda la id de esa casilla usando "data" (declarado en el div de las casillas)
 
-        if (casillas[casillaId] === "vacio") {  //busca la casilla con la id y si esta vacia, checkea las condiciones
+        if (casillas[casillaId] === "vacio" && gameOver===false) {  //busca la casilla con la id y si esta vacia, checkea las condiciones
 
             var imgElement = $(this).find('img'); // identificamos la imagen de la casilla
 
